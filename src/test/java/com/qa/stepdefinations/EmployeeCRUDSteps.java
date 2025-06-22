@@ -14,6 +14,7 @@ import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import junit.framework.Assert;
 
 /**
  * @author Sandip
@@ -46,9 +47,10 @@ public class EmployeeCRUDSteps extends Base {
 		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
 		scenario.write("Navigating to PIM Page after Log in ");
 		objAddEmployeePage = new AddEmployeePage(driver, scenario);
-		objAddEmployeePage.navigateToPIMPage();
+		String expectedPIMPageTitle = objAddEmployeePage.navigateToPIMPage();
 		WaitMethods.staticWait(5000);
 		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
+		Assert.assertEquals("PIM", expectedPIMPageTitle);
 
 	}
 
@@ -71,10 +73,10 @@ public class EmployeeCRUDSteps extends Base {
 
 		scenario.write("Searching the newly added amp in the list");
 		objAddEmployeePage.navigateToEmployeeListPage();
-		objAddEmployeePage.searchEmployeeByname(fName, mName, lName);
+		String actualSearchedFNameandMname = objAddEmployeePage.searchEmployeeByname(fName, mName, lName);
 		WaitMethods.staticWait(5000);
 		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
-
+		Assert.assertEquals(fName + " " + mName, actualSearchedFNameandMname);
 	}
 
 	@When("^I click on Edit button and update below values and save the Data$")
@@ -104,12 +106,12 @@ public class EmployeeCRUDSteps extends Base {
 	@Then("^I select and Delete the Updated Employee and verify employee is not  in search result$")
 	public void i_select_and_Delete_the_Updated_Employee_and_verify_employee_is_not_in_search_result()
 			throws Throwable {
-		
+
 		scenario.write("Deleting the searched employee !");
 		objAddEmployeePage.deleteSearhedEmp();
 		WaitMethods.staticWait(5000);
 		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
-		
+
 	}
 
 	@After
