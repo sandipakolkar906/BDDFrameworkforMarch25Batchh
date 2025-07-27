@@ -21,6 +21,7 @@ public class ClaimsPage {
 
 	// Page object Repo
 
+	// Claims repo
 	@FindBy(xpath = "//span[text()='Claim']")
 	WebElement claimsPageLink;
 
@@ -69,6 +70,35 @@ public class ClaimsPage {
 	@FindBy(xpath = "//button[text()=' Yes, Delete ']")
 	WebElement deleteConfirmationButton;
 
+	//// Event repo
+
+	@FindBy(xpath = "//span[text()='Configuration ']")
+	WebElement configurationMenu;
+
+	@FindBy(xpath = "//a[text()='Events']")
+	WebElement eventsOption;
+
+	@FindBy(xpath = " //button[text()=' Add ']")
+	WebElement addEventButton;
+
+	@FindBy(xpath = "//label[text()='Event Name']/following::input[1]")
+	WebElement eventNameField;
+
+	@FindBy(xpath = "//button[text()=' Save ']")
+	WebElement saveEventButton;
+
+	@FindBy(xpath = "//button[text()=' Search ']")
+	WebElement searchEventButton;
+
+	@FindBy(xpath = "//div[@class='oxd-table-body']/child::div/descendant::div[5]/child::div[1]")
+	WebElement searchedVenetText;
+
+	@FindBy(xpath = "//button[@class='oxd-icon-button oxd-table-cell-action-space']/child::i[@class='oxd-icon bi-pencil-fill']")
+	WebElement editEventButton;
+
+	@FindBy(xpath = "//button[@class='oxd-icon-button oxd-table-cell-action-space']/child::i[@class='oxd-icon bi-trash']")
+	WebElement deleteEventButton;
+
 	// Page class constructer
 
 	public ClaimsPage(WebDriver driver, Scenario scenario) {
@@ -78,7 +108,7 @@ public class ClaimsPage {
 		PageFactory.initElements(driver, this);
 	}
 
-	// Page operation metthods
+	// Page operation metthods - Claims
 
 	public String navigateToClaimsPage() {
 		ElementActions.clickElement(driver, claimsPageLink, scenario);
@@ -151,4 +181,43 @@ public class ClaimsPage {
 		ElementActions.clickElement(driver, deleteExpenseButton, scenario);
 		ElementActions.clickElement(driver, deleteConfirmationButton, scenario);
 	}
+
+	// Page operation metthods - Events
+
+	public void navigateToEventPage() {
+
+		ElementActions.clickElement(driver, configurationMenu, scenario);
+
+		ElementActions.clickElement(driver, eventsOption, scenario);
+
+	}
+
+	public void addNewEvent(String eventName) {
+		ElementActions.clickElement(driver, addEventButton, scenario);
+		ElementActions.sendKeys(driver, eventNameField, scenario, eventName);
+		ElementActions.clickElement(driver, saveEventButton, scenario);
+
+	}
+
+	public String searchNewlyAddedEvent(String eventNameToSearch) {
+
+		ElementActions.sendKeys(driver, eventNameField, scenario, eventNameToSearch);
+
+		ElementActions.clickElement(driver, searchEventButton, scenario);
+
+		return ElementActions.getText(driver, searchedVenetText, scenario);
+
+	}
+
+	public void editEvent(String textToappend) {
+		ElementActions.clickElement(driver, editEventButton, scenario);
+		ElementActions.sendKeys(driver, eventNameField, scenario, textToappend);
+		ElementActions.clickElement(driver, saveEventButton, scenario);
+	}
+
+	public void deleteEvent() {
+		ElementActions.clickElement(driver, deleteEventButton, scenario);
+		ElementActions.clickElement(driver, deleteConfirmationButton, scenario);
+	}
+
 }
