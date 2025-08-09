@@ -8,5 +8,5 @@ Feature: Dashboard Widgets tests
       | WidgetinfoTitle    | ExpectedValue   |
       | lastpunchedinTime  | Not Punched In  |
       | currentTime        | 0h 0m Today     |
-      | CurrentWeekspan    | Jul 28 - Aug 03 |
+      | CurrentWeekspan    | Aug 04 - Aug 10 |
       | TotalWeekHoursmins | 0h 0m           |
