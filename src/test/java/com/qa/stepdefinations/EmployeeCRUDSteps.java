@@ -1,5 +1,7 @@
 package com.qa.stepdefinations;
 
+import java.util.HashMap;
+
 import com.qa.base.Base;
 import com.qa.pages.AddEmployeePage;
 import com.qa.pages.LoginPage;
@@ -112,6 +114,42 @@ public class EmployeeCRUDSteps extends Base {
 		WaitMethods.staticWait(5000);
 		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
 
+	}
+
+	// Employee Reports Steps
+
+	@When("^I add Custom Report with below ReportName as \"([^\"]*)\" and below Display field group and field names$")
+	public void i_add_Custom_Report_with_below_ReportName_as_and_below_Display_field_group_and_field_names(
+			String reportName, DataTable reportFields) throws Throwable {
+		scenario.write("Adding the Report ");
+		objAddEmployeePage.navigateToReports();
+		objAddEmployeePage.addReport(reportName);
+		WaitMethods.staticWait(5000);
+		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
+	}
+
+	@Then("^I  verify Report is searched in the Report with ReportName as \"([^\"]*)\"$")
+	public void i_verify_Report_is_searched_in_the_Report_with_ReportName_as(String reportName) throws Throwable {
+
+		scenario.write("Searching the Report after navigating to report ");
+		objAddEmployeePage.navigateToReports();
+		WaitMethods.staticWait(5000);
+		Assert.assertEquals(reportName, objAddEmployeePage.searchReport(reportName));
+		WaitMethods.staticWait(5000);
+		scenario.embed(CaptureScreenshot.captureImage(driver), "image/png");
+	}
+
+	@Then("^I verify the Report is generated with below fields$")
+	public void i_verify_the_Report_is_generated_with_below_fields(DataTable ReportFields) throws Throwable {
+
+		scenario.write("Generating the Report");
+		HashMap<String, String> actualFieldMap = objAddEmployeePage.generateReport();
+
+		System.out.println(" Actual Values added in map :" + actualFieldMap);
+
+		Assert.assertEquals(ReportFields.raw().get(0).get(1), actualFieldMap.get("field1"));
+		Assert.assertEquals(ReportFields.raw().get(1).get(1), actualFieldMap.get("field3"));
+		Assert.assertEquals(ReportFields.raw().get(2).get(1), actualFieldMap.get("field2"));
 	}
 
 	@After
