@@ -1,7 +1,11 @@
 package com.qa.pages;
 
+import java.util.HashMap;
+
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -78,8 +82,46 @@ public class AddEmployeePage {
 	@FindBy(xpath = "//button[text()=' Yes, Delete ']")
 	WebElement confirmDeleteButton;
 
-	// div[@class='oxd-table-row oxd-table-row--with-border
-	// oxd-table-row--clickable']/child::div[1]
+	// Employee Reports Page Repo
+
+	@FindBy(xpath = "//a[text()='Reports']")
+	WebElement reportsLink;
+
+	@FindBy(xpath = "//label[text()='Report Name']/following::input[1]")
+	WebElement reportNameField;
+
+	@FindBy(xpath = "//button[text()=' Add ']")
+	WebElement addButton;
+
+	@FindBy(xpath = "//label[text()='Select Display Field Group']/following::i[1]")
+	WebElement displayFieldDropdownArrow;
+
+	@FindBy(xpath = "//label[text()='Select Display Field']/following::i[1]")
+	WebElement selectDisplayFieldDropdown;
+
+	@FindBy(xpath = "//label[text()='Select Display Field']/following::i[@class='oxd-icon bi-plus']")
+	WebElement addFieldButton;
+
+	@FindBy(xpath = "//button[text()=' Save ']")
+	WebElement saveReportButton;
+
+	@FindBy(xpath = "//button/following::i[@class='oxd-icon bi-file-text-fill']")
+	WebElement generateReportButton;
+
+	@FindBy(xpath = "//div[@class='header-rgRow actual-rgRow']/div[1]/child::div[1]")
+	WebElement reportField1;
+
+	@FindBy(xpath = "//div[@class='header-rgRow actual-rgRow']/div[2]/child::div[1]")
+	WebElement reportField2;
+
+	@FindBy(xpath = "//div[@class='header-rgRow actual-rgRow']/div[3]/child::div[1]")
+	WebElement reportField3;
+
+	@FindBy(xpath = "//button[text()=' Search ']")
+	WebElement searchReportButton;
+
+	@FindBy(xpath = "//div[@class='oxd-table']/div[@class='oxd-table-body']/descendant::div[6]")
+	WebElement searchedReportName;
 
 	// page class constructrer
 
@@ -153,6 +195,7 @@ public class AddEmployeePage {
 	 * @param lNameAppendValue
 	 */
 	public void editEmpinfo(String fnameAppendValue, String mNameAppendValue, String lNameAppendValue) {
+
 		ElementActions.clickElement(driver, editEmployeeButton, scenario);
 		WaitMethods.staticWait(5000);
 		ElementActions.sendKeys(driver, empFirstNameField, scenario, fnameAppendValue);
@@ -172,6 +215,84 @@ public class AddEmployeePage {
 
 		ElementActions.clickElement(driver, deleteButton, scenario);
 		ElementActions.clickElement(driver, confirmDeleteButton, scenario);
+
+	}
+
+	// Add report page operation methods
+
+	public void navigateToReports() {
+
+		ElementActions.clickElement(driver, reportsLink, scenario);
+
+	}
+
+	public void addReport(String reportName) {
+
+		ElementActions.clickElement(driver, addButton, scenario);
+		WaitMethods.staticWait(2000);
+
+		ElementActions.sendKeys(driver, reportNameField, scenario, reportName);
+		WaitMethods.staticWait(2000);
+		
+		ElementActions.clickElement(driver, displayFieldDropdownArrow, scenario);
+
+		Actions objactions = new Actions(driver);
+
+		WaitMethods.staticWait(2000);
+
+		objactions.sendKeys(Keys.ARROW_DOWN).build().perform();
+		WaitMethods.staticWait(2000);
+		objactions.sendKeys(Keys.ENTER).build().perform();
+
+		WaitMethods.staticWait(2000);
+
+		for (int i = 0; i <= 2; i++) {
+
+			ElementActions.clickElement(driver, selectDisplayFieldDropdown, scenario);
+			WaitMethods.staticWait(2000);
+			objactions.sendKeys(Keys.ARROW_DOWN).build().perform();
+			WaitMethods.staticWait(2000);
+			objactions.sendKeys(Keys.ENTER).build().perform();
+			WaitMethods.staticWait(2000);
+
+			ElementActions.clickElement(driver, addFieldButton, scenario);
+
+		}
+
+		ElementActions.clickElement(driver, saveReportButton, scenario);
+		WaitMethods.staticWait(5000);
+
+	}
+
+	public String searchReport(String reportName) {
+		
+		ElementActions.sendKeys(driver, reportNameField, scenario, reportName);
+		Actions objactions = new Actions(driver);
+
+		WaitMethods.staticWait(2000);
+		objactions.sendKeys(Keys.ARROW_DOWN).build().perform();
+		WaitMethods.staticWait(2000);
+		objactions.sendKeys(Keys.ENTER).build().perform();
+
+		WaitMethods.staticWait(2000);
+		ElementActions.clickElement(driver, searchReportButton, scenario);
+
+		WaitMethods.staticWait(2000);
+
+		return ElementActions.getText(driver, searchedReportName, scenario);
+
+	}
+
+	public HashMap<String, String> generateReport() {
+
+		ElementActions.clickElement(driver, generateReportButton, scenario);
+		WaitMethods.staticWait(5000);
+		HashMap<String, String> objfieldMap = new HashMap<String, String>();
+
+		objfieldMap.put("field1", ElementActions.getText(driver, reportField1, scenario));
+		objfieldMap.put("field2", ElementActions.getText(driver, reportField2, scenario));
+		objfieldMap.put("field3", ElementActions.getText(driver, reportField3, scenario));
+		return objfieldMap;
 
 	}
 
